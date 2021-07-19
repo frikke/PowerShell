@@ -416,7 +416,7 @@ namespace Microsoft.PowerShell.Commands
             return result;
         }
 
-        private class ComCreateInfo
+        private sealed class ComCreateInfo
         {
             public object objectCreated;
             public bool success;
@@ -519,12 +519,8 @@ namespace Microsoft.PowerShell.Commands
     /// <summary>
     /// Native methods for dealing with COM objects.
     /// </summary>
-    internal class NewObjectNativeMethods
+    internal static class NewObjectNativeMethods
     {
-        private NewObjectNativeMethods()
-        {
-        }
-
         /// Return Type: HRESULT->LONG->int
         [DllImport(PinvokeDllNames.CLSIDFromProgIDDllName)]
         internal static extern int CLSIDFromProgID([MarshalAs(UnmanagedType.LPWStr)] string lpszProgID, out Guid pclsid);

@@ -292,7 +292,10 @@ namespace Microsoft.PowerShell.Commands
         [Alias("RA")]
         public string[] ReferencedAssemblies
         {
-            get { return _referencedAssemblies; }
+            get
+            {
+                return _referencedAssemblies;
+            }
 
             set
             {
@@ -1104,7 +1107,7 @@ namespace Microsoft.PowerShell.Commands
         }
 
         // Visit symbols in all namespaces and collect duplicates.
-        private class AllNamedTypeSymbolsVisitor : SymbolVisitor
+        private sealed class AllNamedTypeSymbolsVisitor : SymbolVisitor
         {
             public readonly ConcurrentBag<string> DuplicateSymbols = new();
             public readonly ConcurrentBag<string> UniqueSymbols = new();

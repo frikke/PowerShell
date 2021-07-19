@@ -2055,6 +2055,7 @@ namespace System.Management.Automation
         /// <see cref="System.Management.Automation.Cmdlet.ProcessRecord"/>.
         /// etc.
         /// </remarks>
+        [System.Diagnostics.CodeAnalysis.DoesNotReturn]
         public void ThrowTerminatingError(ErrorRecord errorRecord)
         {
             ThrowIfStopping();
@@ -2317,7 +2318,7 @@ namespace System.Management.Automation
             return new AllowWrite(_thisCommand, permittedToWriteToPipeline);
         }
 
-        private class AllowWrite : IDisposable
+        private sealed class AllowWrite : IDisposable
         {
             /// <summary>
             /// Begin the scope where WriteObject/WriteError is permitted.
@@ -3136,7 +3137,10 @@ namespace System.Management.Automation
         /// </remarks>
         internal bool Verbose
         {
-            get { return _verboseFlag; }
+            get
+            {
+                return _verboseFlag;
+            }
 
             set
             {
@@ -3209,7 +3213,10 @@ namespace System.Management.Automation
         /// </remarks>
         internal bool Debug
         {
-            get { return _debugFlag; }
+            get
+            {
+                return _debugFlag;
+            }
 
             set
             {

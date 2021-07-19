@@ -529,7 +529,7 @@ namespace System.Management.Automation
                 // For background jobs rewrite the pipeline as a Start-Job command
                 var scriptblockBodyString = pipelineAst.Extent.Text;
                 var pipelineOffset = pipelineAst.Extent.StartOffset;
-                var variables = pipelineAst.FindAll(x => x is VariableExpressionAst, true);
+                var variables = pipelineAst.FindAll(static x => x is VariableExpressionAst, true);
 
                 // Used to make sure that the job runs in the current directory
                 const string cmdPrefix = @"Microsoft.PowerShell.Management\Set-Location -LiteralPath $using:pwd ; ";
@@ -1379,7 +1379,7 @@ namespace System.Management.Automation
         /// <summary>
         /// Represent a handler search result.
         /// </summary>
-        private class HandlerSearchResult
+        private sealed class HandlerSearchResult
         {
             internal HandlerSearchResult()
             {

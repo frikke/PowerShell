@@ -265,8 +265,7 @@ namespace Microsoft.PowerShell
 #endif
         }
 
-        private
-        class FindOldestNodeVisitor : NodeVisitor
+        private sealed class FindOldestNodeVisitor : NodeVisitor
         {
             internal override
             bool
@@ -366,8 +365,7 @@ namespace Microsoft.PowerShell
                 FindNodeById(sourceId, activityId, out listWhereFound, out indexWhereFound);
         }
 
-        private
-        class FindByIdNodeVisitor : NodeVisitor
+        private sealed class FindByIdNodeVisitor : NodeVisitor
         {
             internal
             FindByIdNodeVisitor(Int64 sourceIdToFind, int activityIdToFind)
@@ -508,15 +506,18 @@ namespace Microsoft.PowerShell
             return found;
         }
 
-        private
-        class AgeAndResetStyleVisitor : NodeVisitor
+        private sealed class AgeAndResetStyleVisitor : NodeVisitor
         {
             internal override
             bool
             Visit(ProgressNode node, ArrayList unused, int unusedToo)
             {
                 node.Age = Math.Min(node.Age + 1, Int32.MaxValue - 1);
-                node.Style = ProgressNode.RenderStyle.FullPlus;
+
+                node.Style = ProgressNode.IsMinimalProgressRenderingEnabled()
+                    ? ProgressNode.RenderStyle.Ansi
+                    : node.Style = ProgressNode.RenderStyle.FullPlus;
+
                 return true;
             }
         }
@@ -582,6 +583,13 @@ namespace Microsoft.PowerShell
             }
 
             ArrayList result = new ArrayList();
+
+            if (ProgressNode.IsMinimalProgressRenderingEnabled())
+            {
+                RenderHelper(result, _topLevelNodes, indentation: 0, maxWidth, rawUI);
+                return (string[])result.ToArray(typeof(string));
+            }
+
             string border = StringUtil.Padding(maxWidth);
 
             result.Add(border);
@@ -655,8 +663,7 @@ namespace Microsoft.PowerShell
             }
         }
 
-        private
-        class HeightTallyer : NodeVisitor
+        private sealed class HeightTallyer : NodeVisitor
         {
             internal HeightTallyer(PSHostRawUserInterface rawUi, int maxHeight, int maxWidth)
             {
